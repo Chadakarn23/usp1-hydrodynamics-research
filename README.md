@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.ces.2023.118946-blue)](https://doi.org/10.1016/j.ces.2023.118946)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Chadakarn23CS/usp1-hydrodynamics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Chadakarn23/usp1-hydrodynamics-research)
 
 ---
 
@@ -43,8 +43,8 @@ Turns static journal data — velocity fields, turbulence model comparisons, mes
 ## Quick Start
 
 ```bash
-git clone https://github.com/Chadakarn23CS/usp1-hydrodynamics.git
-cd usp1-hydrodynamics
+git clone https://github.com/Chadakarn23/usp1-hydrodynamics-research.git
+cd usp1-hydrodynamics-research
 pip install -r requirements.txt
 streamlit run app.py
 ```

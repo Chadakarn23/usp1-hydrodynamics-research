@@ -173,6 +173,6 @@ def sidebar_about():
             "[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)]"
             "(https://www.linkedin.com/in/chadakarn-gift-sirasitthichoke-417979a6/) &nbsp; "
             "[![GitHub](https://img.shields.io/badge/GitHub-Repo-black?logo=github)]"
-            "(https://github.com/Chadakarn23CS/usp1-hydrodynamics)"
+            "(https://github.com/Chadakarn23/usp1-hydrodynamics-research)"
         )
         st.caption("Built with Streamlit + Plotly · AI-accelerated development")
