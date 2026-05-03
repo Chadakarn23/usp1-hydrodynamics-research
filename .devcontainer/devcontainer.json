@@ -1,0 +1,13 @@
+{
+  "name": "Dissolution Hydrodynamics Explorer",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "pip install -r requirements.txt",
+  "postStartCommand": "streamlit run app.py --server.port 8501 --server.headless true &",
+  "forwardPorts": [8501],
+  "portsAttributes": {
+    "8501": {
+      "label": "Streamlit App",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}

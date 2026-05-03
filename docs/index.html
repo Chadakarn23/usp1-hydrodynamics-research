@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dissolution Apparatus Hydrodynamics Explorer</title>
+    <meta name="description" content="Interactive tool for exploring CFD and PIV hydrodynamics in USP Dissolution Apparatus 1. Built on 5 peer-reviewed publications.">
+    <style>
+        :root {
+            --primary: #1a5276;
+            --accent: #2980b9;
+            --bg: #fafbfc;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --muted: #7f8c8d;
+            --border: #e1e4e8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            color: white;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.92;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.8rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-primary { background: #e74c3c; color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.4); }
+
+        /* Container */
+        .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Section */
+        section { padding: 3rem 0; }
+        section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Feature cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        .card p { font-size: 0.92rem; color: var(--muted); }
+
+        /* Audience */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+        .audience-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+        .audience-item strong { display: block; margin-bottom: 0.3rem; color: var(--primary); }
+        .audience-item span { font-size: 0.9rem; color: var(--muted); }
+
+        /* Key finding */
+        .highlight {
+            background: #eaf2f8;
+            border-left: 4px solid var(--accent);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1.5rem 0;
+        }
+        .highlight strong { color: var(--primary); }
+
+        /* Publications table */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        th { font-weight: 600; color: var(--primary); background: #f5f7fa; }
+        td { color: var(--text); }
+
+        /* Quick start */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            line-height: 1.7;
+        }
+        .code-block .comment { color: #6a9955; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero { padding: 2.5rem 1.25rem 2rem; }
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { font-size: 1rem; }
+            section h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+    <h1>Dissolution Apparatus Hydrodynamics Explorer</h1>
+    <p>
+        Interactive tool for exploring validated CFD and PIV hydrodynamics data 
+        in USP Dissolution Apparatus 1 (basket type). Built on 5 peer-reviewed publications.
+    </p>
+    <div class="hero-buttons">
+        <a href="https://github.com/Chadakarn23CS/usp1-hydrodynamics" class="btn btn-primary">View on GitHub</a>
+    </div>
+</div>
+
+<!-- What it does -->
+<section>
+    <div class="container">
+        <h2>What This Tool Does</h2>
+        <p style="margin-bottom:1.5rem; color: var(--muted);">
+            Explore turbulence model selection, mesh independence, CFD&ndash;PIV validation, 
+            flow rates, power numbers, and mixing times &mdash; all in your browser. 
+            No CFD software required.
+        </p>
+        <div class="features-grid">
+            <div class="card">
+                <h3>For Scientists &amp; Engineers</h3>
+                <p>Practical pharma applications: method development, OOS troubleshooting, regulatory justification with validated hydrodynamic data.</p>
+            </div>
+            <div class="card">
+                <h3>Turbulence Model Selection</h3>
+                <p>Compare 4 RANS models (Realizable k-&epsilon;, Standard k-&epsilon;, k-&omega;, SST) &mdash; convergence behavior and PIV agreement side by side.</p>
+            </div>
+            <div class="card">
+                <h3>Mesh Independence</h3>
+                <p>See why a 20-mesh basket needs 3.5&times; more cells than a 10-mesh, with quantitative convergence metrics.</p>
+            </div>
+            <div class="card">
+                <h3>CFD vs PIV Validation</h3>
+                <p>Validation summary across 7 horizontal measurement planes, plus flow rate comparison from published data.</p>
+            </div>
+            <div class="card">
+                <h3>Power Number &amp; Mixing Time</h3>
+                <p>Power consumption (Po) comparisons across basket configurations, and blend time data at different fill volumes.</p>
+            </div>
+            <div class="card">
+                <h3>CFD Knowledge Base</h3>
+                <p>Expert-level setup guidance: turbulence model, mesh sizing, solver settings, boundary conditions &mdash; all referenced to published results.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key finding -->
+<section style="background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <h2>Key Finding</h2>
+        <div class="highlight">
+            Of 4 RANS turbulence models tested, only <strong>Realizable k-&epsilon; with Standard Wall Functions</strong> 
+            achieved both convergence (residuals &lt; 10<sup>&minus;4</sup>) and agreement with PIV experiments 
+            at all measurement locations.
+        </div>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.75rem;">
+            Conditions: USP Apparatus 1 per USP &lt;711&gt;, 100 RPM, 900 mL water at 20 &deg;C, Re &asymp; 1075. 
+            Basket mesh sizes: 10- and 20-mesh (CFD), 10-, 20-, and 40-mesh (PIV).
+        </p>
+    </div>
+</section>
+
+<!-- Who is this for -->
+<section>
+    <div class="container">
+        <h2>Who Is This For?</h2>
+        <div class="audience-grid">
+            <div class="audience-item">
+                <strong>Formulation Scientist</strong>
+                <span>Understand how basket mesh size affects flow around the tablet</span>
+            </div>
+            <div class="audience-item">
+                <strong>Analytical R&amp;D</strong>
+                <span>Justify dissolution method parameters with validated hydrodynamic data</span>
+            </div>
+            <div class="audience-item">
+                <strong>CMC / Regulatory</strong>
+                <span>Support FDA questions with peer-reviewed CFD evidence</span>
+            </div>
+            <div class="audience-item">
+                <strong>CFD Engineer</strong>
+                <span>Get validated turbulence model settings and mesh guidelines</span>
+            </div>
+            <div class="audience-item">
+                <strong>Student / Researcher</strong>
+                <span>Benchmark your USP-1 simulations against published experimental data</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Publications -->
+<section style="background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <h2>Data Sources &mdash; 5 Peer-Reviewed Publications + Dissertation</h2>
+        <table>
+            <thead>
+                <tr><th>Year</th><th>Topic</th><th>Journal</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2023</td>
+                    <td>CFD of USP-1 hydrodynamics (10- &amp; 20-mesh)</td>
+                    <td><em>Chem. Eng. Sci.</em> 280, 118946</td>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>Blend time in USP-1</td>
+                    <td><em>Chem. Eng. Res. Des.</em> 194, 705&ndash;721</td>
+                </tr>
+                <tr>
+                    <td>2022</td>
+                    <td>Power number in stirred vessels</td>
+                    <td><em>Chem. Eng. Sci.</em> 257, 117725</td>
+                </tr>
+                <tr>
+                    <td>2021</td>
+                    <td>PIV velocity distribution in USP-1</td>
+                    <td><em>Int. J. Pharm: X</em> 3, 100078</td>
+                </tr>
+                <tr>
+                    <td>2021</td>
+                    <td>Basket mesh size influence on hydrodynamics</td>
+                    <td><em>Int. J. Pharm.</em> 607, 120976</td>
+                </tr>
+                <tr>
+                    <td>2021</td>
+                    <td>PhD Dissertation</td>
+                    <td>NJIT</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Quick start -->
+<section>
+    <div class="container">
+        <h2>Run It Locally</h2>
+        <div class="code-block">
+            <span class="comment"># Clone and run</span><br>
+            git clone https://github.com/Chadakarn23CS/usp1-hydrodynamics.git<br>
+            cd usp1-hydrodynamics<br>
+            pip install -r requirements.txt<br>
+            streamlit run app.py
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--muted);">
+            Requires Python 3.10+. Opens at <code>http://localhost:8501</code>.
+        </p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>
+        <strong>Dissolution Apparatus Hydrodynamics Explorer</strong><br>
+        Data from 5 peer-reviewed publications &bull; 
+        <a href="https://doi.org/10.1016/j.ces.2023.118946">Primary DOI: 10.1016/j.ces.2023.118946</a> &bull; 
+        MIT License
+    </p>
+</footer>
+
+</body>
+</html>

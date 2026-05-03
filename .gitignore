@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.streamlit/secrets.toml
+*.xlsx
+*.plt
+*.msb
+app_old.py
+LINKEDIN_POST.md
+linkedin-screenshot.png
