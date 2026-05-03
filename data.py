@@ -102,6 +102,105 @@ FLOW_RATE_CFD = pd.DataFrame({
     "Q_out (mL/s)": [7.30, 6.95, 6.68, 6.10],
 })
 
+# ─── BCS Classification Data ─────────────────────────────────────────────────
+BCS_CLASSES = {
+    "I": {
+        "label": "Class I",
+        "solubility": "High",
+        "permeability": "High",
+        "color": "#2ca02c",
+        "color_light": "#d4edda",
+        "examples": ["Metoprolol", "Verapamil", "Diltiazem", "Propranolol", "Theophylline", "Caffeine"],
+        "mechanism": "Dissolution is rapid (≥85% in 30 min). Absorption is permeability-limited, not dissolution-limited.",
+        "hydro_sensitivity": "Low",
+        "sensitivity_score": 1,
+        "mesh_rec": "10-mesh (standard)",
+        "rpm_rec": "50–100 RPM",
+        "volume_rec": "900 mL",
+        "medium_rec": "0.1 N HCl, pH 4.5 acetate, pH 6.8 phosphate buffer",
+        "biowaiver": True,
+        "key_risk": "Method is typically non-discriminating; ensure robustness across pH range.",
+        "oos_guidance": "OOS rarely caused by hydrodynamics. Check: media pH, temperature, basket positioning, filter integrity.",
+        "discriminating_note": "Not typically required for BCS I — dissolution is rapid under all standard conditions.",
+    },
+    "II": {
+        "label": "Class II",
+        "solubility": "Low",
+        "permeability": "High",
+        "color": "#d62728",
+        "color_light": "#f8d7da",
+        "examples": ["Ibuprofen", "Carbamazepine", "Ketoconazole", "Naproxen", "Phenytoin", "Griseofulvin"],
+        "mechanism": "Dissolution is the rate-limiting step for absorption. Hydrodynamics directly control how fast the drug dissolves — mesh size and RPM are critical.",
+        "hydro_sensitivity": "High",
+        "sensitivity_score": 4,
+        "mesh_rec": "10-mesh preferred (70% more flow vs 40-mesh)",
+        "rpm_rec": "100 RPM standard; 150 RPM for biorelevant stress testing",
+        "volume_rec": "500 mL or 900 mL; use sink conditions",
+        "medium_rec": "Biorelevant: FaSSIF (fasted), FeSSIF (fed); or surfactant-added pH 6.8",
+        "biowaiver": False,
+        "key_risk": "Highly sensitive to basket mesh, RPM, and medium. 10-mesh vs 40-mesh → 70% flow difference → significantly different dissolution profiles.",
+        "oos_guidance": "High likelihood of hydrodynamic root cause. Check: mesh size (correct? clogged?), basket centering (±2 mm tolerance), RPM calibration, medium surfactant concentration.",
+        "discriminating_note": "Design discriminating method to detect formulation changes. 10-mesh at 100 RPM in FaSSIF is a good starting point.",
+    },
+    "III": {
+        "label": "Class III",
+        "solubility": "High",
+        "permeability": "Low",
+        "color": "#ff7f0e",
+        "color_light": "#fff3cd",
+        "examples": ["Cimetidine", "Acyclovir", "Ranitidine", "Atenolol", "Metformin", "Neomycin"],
+        "mechanism": "Dissolution is rapid (like Class I). Permeability is rate-limiting. Hydrodynamics have limited impact on bioavailability.",
+        "hydro_sensitivity": "Low–Medium",
+        "sensitivity_score": 2,
+        "mesh_rec": "10-mesh or 20-mesh (standard)",
+        "rpm_rec": "50–100 RPM",
+        "volume_rec": "900 mL",
+        "medium_rec": "pH 1.2, 4.5, 6.8 buffers; match GI pH gradient",
+        "biowaiver": True,
+        "key_risk": "Permeability enhancers in formulation may affect absorption more than dissolution. Monitor dissolution vs in vivo correlation.",
+        "oos_guidance": "OOS less likely from hydrodynamics. Check: medium composition, API particle size, excipient interaction.",
+        "discriminating_note": "BCS III biowaiver possible under EMA (2010) and WHO (TRS 937) — NOT recognized by FDA 2000. Dissolution method confirms rapid dissolution, not discriminating.",
+    },
+    "IV": {
+        "label": "Class IV",
+        "solubility": "Low",
+        "permeability": "Low",
+        "color": "#9467bd",
+        "color_light": "#e9d8f5",
+        "examples": ["Furosemide", "Hydrochlorothiazide", "Paclitaxel (Taxol)", "Ritonavir", "Cyclosporine A"],
+        "mechanism": "Both solubility and permeability limit absorption. Dissolution is very slow. Biorelevant conditions are essential for meaningful in vitro–in vivo correlation.",
+        "hydro_sensitivity": "High",
+        "sensitivity_score": 4,
+        "mesh_rec": "10-mesh (maximize flow and shear for poorly soluble drugs)",
+        "rpm_rec": "100–150 RPM; consider apparatus comparison (USP-1 vs USP-2)",
+        "volume_rec": "500 mL or 900 mL; ensure sink conditions",
+        "medium_rec": "Biorelevant required: FaSSIF/FeSSIF; consider pH-gradient dissolution",
+        "biowaiver": False,
+        "key_risk": "Most challenging class. Neither dissolution nor permeability is favorable. Small changes in hydrodynamics or medium give large profile differences.",
+        "oos_guidance": "Both formulation and hydrodynamic factors likely. Check all apparatus parameters. Consider whether biorelevant media is correctly prepared.",
+        "discriminating_note": "Method must be discriminating — use biorelevant media. Hydrodynamic conditions should stress-test the formulation.",
+    },
+}
+
+# Sensitivity matrix: BCS class × apparatus parameter
+BCS_SENSITIVITY = pd.DataFrame({
+    "Parameter": ["Basket Mesh Size", "RPM / Agitation", "Fill Volume", "Medium Composition", "Basket Centering (±2 mm)", "Temperature"],
+    "Class I":  ["Low", "Low",    "Low",    "Medium", "Low",    "Low"],
+    "Class II": ["High", "High",   "Medium", "High",   "High",   "Medium"],
+    "Class III":["Low",  "Low",    "Low",    "Medium", "Low",    "Low"],
+    "Class IV": ["High", "High",   "Medium", "High",   "High",   "Medium"],
+})
+
+# Flow rate impact by mesh — from published PIV data (Sirasitthichoke 2021b, 2023)
+MESH_FLOW_BCS = pd.DataFrame({
+    "Basket Mesh": ["10-mesh", "20-mesh", "40-mesh"],
+    "Wire Opening (mm)": [1.90, 0.86, 0.38],
+    "Q_avg 900mL (mL/s)": [7.03, 6.30, 4.09],
+    "Relative to 10-mesh (%)": [100, 89.6, 58.2],
+    "BCS II/IV Impact": ["Standard reference", "Moderate reduction in shear", "~42% less flow — slower dissolution for BCS II/IV"],
+    "BCS I/III Impact": ["All adequate", "All adequate", "All adequate"],
+})
+
 # ─── Publications list ────────────────────────────────────────────────────────
 PUBLICATIONS = [
     {

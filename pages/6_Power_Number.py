@@ -47,3 +47,18 @@ fig_po.update_layout(
 st.plotly_chart(fig_po, use_container_width=True)
 
 st.dataframe(POWER_DATA, use_container_width=True, hide_index=True)
+st.download_button("⬇ Download Power Number Data (CSV)", POWER_DATA.to_csv(index=False),
+                   file_name="power_number_data.csv", mime="text/csv")
+
+st.markdown("---")
+st.markdown("""
+### Practical Note for Method Development
+
+The extremely low Po values (≈3.5–3.9 × 10⁻⁴) confirm the basket is **not an efficient mixer** —
+it functions as a cylindrical screen rather than an impeller. This is why:
+- Mixing time is long relative to high-shear mixers (see Mixing Time page)
+- Concentration gradients can persist — particularly relevant for **BCS Class II/IV** compounds
+- RPM selection matters for energy input: each 2× RPM increase means 8× more power (P ~ N³)
+
+→ Use the [Condition Calculator](/Condition_Calculator) to estimate power at your RPM.
+""")

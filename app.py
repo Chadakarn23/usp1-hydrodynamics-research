@@ -159,9 +159,10 @@ st.markdown("""
 <div class="hero-banner">
     <h1>🌀 Dissolution Apparatus Hydrodynamics Explorer</h1>
     <p>
-        Interactive research tool for exploring validated CFD and PIV data 
-        in USP Dissolution Apparatus 1 (rotating basket). Built from doctoral 
+        Interactive research tool for exploring validated CFD and PIV data
+        in USP Dissolution Apparatus 1 (rotating basket). Built from doctoral
         dissertation research and 5 peer-reviewed publications.
+        Now featuring <strong>BCS-guided method development</strong> and a <strong>condition scaling calculator</strong>.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -169,10 +170,11 @@ st.markdown("""
 # ─── Key Finding ──────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="callout">
-    <strong>Key Finding:</strong> Of 4 RANS turbulence models tested, only 
-    <strong>Realizable k-ε with Standard Wall Functions</strong> achieved both 
+    <strong>Key Finding:</strong> Of 4 RANS turbulence models tested, only
+    <strong>Realizable k-ε with Standard Wall Functions</strong> achieved both
     convergence (residuals &lt; 10⁻⁴) and agreement with PIV experiments.
     &nbsp;•&nbsp; 100 RPM &nbsp;•&nbsp; 900 mL water at 20 °C &nbsp;•&nbsp; Re ≈ 1075
+    &nbsp;•&nbsp; <span style="background:rgba(255,255,255,0.25); border-radius:8px; padding:2px 8px;">🧬 BCS integration + 🔢 Condition Calculator now available</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -191,6 +193,8 @@ CARDS = [
     ("⏱️", "Mixing Time", "Blend time data across fill volumes and mesh sizes"),
     ("📖", "CFD Knowledge Base", "Setup recipe — turbulence model, mesh, solver, boundary conditions"),
     ("📚", "Publications & About", "Full publication list with DOIs — every data point traced to source"),
+    ("🧬", "BCS Method Development", "NEW — BCS class wizard, sensitivity heatmap, OOS guide, regulatory context"),
+    ("🔢", "Condition Calculator", "NEW — Scale RPM, temperature & volume; estimate Re, flow rate, blend time"),
 ]
 
 # Build page URL lookup from actual files on disk
@@ -205,11 +209,11 @@ for f in _page_files:
     slug = "_".join(slug.split("_")[1:])                    # "Scientists_and_Engineers"
     _url_map[int(num)] = "/" + slug
 
-for row_start in range(0, 9, 3):
+for row_start in range(0, len(CARDS), 3):
     cards_html = '<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem;">'
     for i in range(3):
         idx = row_start + i
-        if idx < len(CARDS):
+        if idx < len(CARDS) and idx < 11:
             icon, title, desc = CARDS[idx]
             page_num = idx + 1
             href = _url_map.get(page_num, "#")

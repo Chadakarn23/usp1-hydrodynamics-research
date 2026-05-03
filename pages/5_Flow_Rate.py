@@ -4,7 +4,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import streamlit as st
 import plotly.graph_objects as go
-from data import FLOW_RATE_DATA, FLOW_RATE_CFD, sidebar_about
+from data import FLOW_RATE_DATA, FLOW_RATE_CFD, BCS_CLASSES, sidebar_about
 
 st.set_page_config(page_title="Flow Rate", page_icon="🔄", layout="wide")
 sidebar_about()
@@ -30,6 +30,8 @@ else:
     show_flow = FLOW_RATE_DATA[FLOW_RATE_DATA["Volume (mL)"] == 500]
 
 st.dataframe(show_flow, use_container_width=True, hide_index=True)
+st.download_button("⬇ Download PIV Flow Rate Data (CSV)", show_flow.to_csv(index=False),
+                   file_name="piv_flow_rate_data.csv", mime="text/csv")
 
 fig_flow = go.Figure()
 for vol in ([900, 500] if vol_choice == "Both" else [int(vol_choice.split()[0])]):
@@ -76,7 +78,33 @@ with col2:
     st.markdown("Q_in difference: **13.3%** | Q_out difference: **9.1%**")
 
 st.info("""
-**Key insight:** Larger mesh openings (10-mesh: 1.90 mm) allow ~70% more flow through 
-the basket than finer mesh (40-mesh: 0.40 mm). This means a tablet inside a 10-mesh basket 
+**Key insight:** Larger mesh openings (10-mesh: 1.90 mm) allow ~70% more flow through
+the basket than finer mesh (40-mesh: 0.40 mm). This means a tablet inside a 10-mesh basket
 is exposed to higher velocities, enhancing solid–liquid mass transfer and faster dissolution.
 """)
+
+st.markdown("---")
+st.markdown("### 🧬 BCS Class Implications of Flow Rate Differences")
+st.markdown("Select your compound's BCS class to see what the flow rate data means for you:")
+
+bcs_pick = st.radio("BCS Class:", ["I", "II", "III", "IV"],
+                    format_func=lambda k: f"Class {k} — {BCS_CLASSES[k]['solubility']} S / {BCS_CLASSES[k]['permeability']} P",
+                    horizontal=True, key="flow_bcs")
+cls = BCS_CLASSES[bcs_pick]
+if bcs_pick in ["II", "IV"]:
+    st.error(f"""
+    **BCS Class {bcs_pick} — High hydrodynamic sensitivity.**
+    For {cls['examples'][0]}-type compounds, the 70% flow difference between 10-mesh and 40-mesh
+    directly translates into different dissolution rates. This is a **critical method parameter**
+    that must be specified and controlled in your dissolution method.
+    Recommended mesh: **{cls['mesh_rec']}**
+    → Use the [BCS Method Development page](/BCS_Method_Development) for full guidance.
+    """)
+else:
+    st.success(f"""
+    **BCS Class {bcs_pick} — Low hydrodynamic sensitivity.**
+    For {cls['examples'][0]}-type compounds, dissolution is rapid regardless of mesh choice.
+    The 70% flow difference between 10-mesh and 40-mesh has minimal impact on bioavailability.
+    Standard 10-mesh at 100 RPM is appropriate.
+    → See [BCS Method Development page](/BCS_Method_Development) for complete recommendations.
+    """)
