@@ -174,7 +174,8 @@ MIT — free to use, modify, and redistribute. See [LICENSE](LICENSE).
 
 **Chadakarn Sirasitthichoke, Ph.D.**
 - PhD, Chemical Engineering — New Jersey Institute of Technology (2021)
-- Senior Data Scientist & Process Modeling Engineer, Bristol Myers Squibb
 - [LinkedIn](https://www.linkedin.com/in/chadakarn-gift-sirasitthichoke-417979a6/)
+
+> **Personal project disclaimer:** This tool was developed entirely on personal time using the author's own PhD dissertation research (2021) and personal computing resources. All data originates from publicly available peer-reviewed publications.
 
 > *The scientific content — turbulence model selection, mesh independence criteria, CFD–PIV validation, flow rates, power numbers, mixing times, and BCS hydrodynamic guidance — originates entirely from the author's published work. Generative AI was used as a coding accelerator to translate validated research into interactive tooling.*

@@ -76,10 +76,14 @@ International Journal of Pharmaceutics: X, 3, 100078.
 st.markdown("---")
 st.markdown("### 👤 About the Author")
 st.markdown("""
-**Chadakarn Sirasitthichoke, PhD**  
-MS&T Systems & Engineering | Bristol Myers Squibb  
-PhD in Chemical Engineering, NJIT (2021)  
+**Chadakarn Sirasitthichoke, PhD**
+PhD in Chemical Engineering — New Jersey Institute of Technology (2021)
 
-Research interests: CFD, mixing, dissolution testing, process scale-up, 
+Research interests: CFD, mixing, dissolution testing, process scale-up,
 multivariate data analysis, AI/ML for pharmaceutical engineering
 """)
+st.caption(
+    "⚠️ **Personal project disclaimer:** This tool was developed entirely on personal time "
+    "using the author's own PhD dissertation research (2021) and personal computing resources. "
+    "All data originates from publicly available peer-reviewed publications listed above."
+)
