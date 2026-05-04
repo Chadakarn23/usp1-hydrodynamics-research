@@ -3,9 +3,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import streamlit as st
-import pandas as pd
 import plotly.graph_objects as go
-from data import sidebar_about
+from data import BLEND_TIME, sidebar_about
 
 st.set_page_config(page_title="Mixing Time", page_icon="⏱️", layout="wide")
 sidebar_about()
@@ -19,21 +18,6 @@ and fill volumes.
 *Source: Pace, Sirasitthichoke, Armenante (2023), Chem. Eng. Res. Des. 194, 705–721*
 """)
 
-BLEND_TIME = pd.DataFrame({
-    "Basket Mesh": ["10-mesh", "10-mesh", "20-mesh", "20-mesh", "40-mesh"],
-    "Volume (mL)": [500, 900, 500, 900, 900],
-    "RPM": [100, 100, 100, 100, 100],
-    "Relative Blend Time": [1.0, 1.8, 1.4, 2.2, 3.0],
-    "Qualitative Trend": ["Fastest (reference)", "Moderate", "Moderate", "Slower", "Slowest"],
-    "CFD–Exp Agreement": ["✓ Validated", "✓ Validated", "✓ Validated", "✓ Validated", "✓ Validated"],
-    "Impact on Sampling": [
-        "Most representative — minimal concentration gradients",
-        "Adequate — short blend time relative to typical dissolution",
-        "Adequate",
-        "Moderate gradient risk — sample timing matters",
-        "Highest gradient risk — dissolution may appear slower than actual",
-    ],
-})
 st.dataframe(BLEND_TIME, use_container_width=True, hide_index=True)
 st.caption("Relative Blend Time normalized to 10-mesh, 500 mL = 1.0. Actual values from Pace, Sirasitthichoke, Armenante (2023).")
 st.download_button("⬇ Download Blend Time Data (CSV)", BLEND_TIME.to_csv(index=False),

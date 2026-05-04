@@ -6,7 +6,8 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from data import D_BASKET, T_VESSEL, RHO, MU, RE, N, UTIP, FLOW_RATE_DATA, sidebar_about
+from data import (D_BASKET, T_VESSEL, RHO, MU, RE, N, UTIP, FLOW_RATE_DATA,
+                  BLEND_BASELINES_900, BLEND_BASELINES_500, sidebar_about)
 
 st.set_page_config(page_title="Condition Calculator", page_icon="🔢", layout="wide")
 sidebar_about()
@@ -112,15 +113,13 @@ q_ref_mesh = flow_baselines[basket_mesh]
 q_user = q_ref_mesh * (N_user / N_ref)
 
 # Mixing time scales inversely with N (θ ~ 1/N)
-# Rough blend time reference from qualitative data (Pace et al. 2023)
-blend_baselines_900 = {"10-mesh": 45, "20-mesh": 63, "40-mesh": 90}   # seconds, approximate
-blend_baselines_500 = {"10-mesh": 30, "20-mesh": 42, "40-mesh": 60}
-blend_ref = blend_baselines_900[basket_mesh] if volume_ml == 900 else blend_baselines_500[basket_mesh]
+blend_ref = BLEND_BASELINES_900[basket_mesh] if volume_ml == 900 else BLEND_BASELINES_500[basket_mesh]
 blend_user = blend_ref * (N_ref / N_user)
 
 # Power consumption scales as N³
 power_baselines = {"10-mesh": 4.2e-5, "20-mesh": 1.35e-4}
-power_ref_val = power_baselines.get(basket_mesh, 4.2e-5)
+power_no_data = basket_mesh not in power_baselines
+power_ref_val = power_baselines.get(basket_mesh, power_baselines["10-mesh"])
 power_user = power_ref_val * (N_user / N_ref) ** 3
 
 # Regime classification
@@ -188,6 +187,9 @@ cf4.markdown(f"""<div class="result-card">
     <div class="val">{re_user / RE:.2f}×</div>
     <div class="lbl">Re vs. Published Baseline (100 RPM, 20°C)</div>
 </div>""", unsafe_allow_html=True)
+
+if power_no_data:
+    st.warning("**Power estimate for 40-mesh:** No published CFD torque data for 40-mesh. Shown value is extrapolated from 10-mesh baseline — treat as a rough order-of-magnitude only.")
 
 st.markdown("---")
 

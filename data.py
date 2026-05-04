@@ -102,6 +102,27 @@ FLOW_RATE_CFD = pd.DataFrame({
     "Q_out (mL/s)": [7.30, 6.95, 6.68, 6.10],
 })
 
+# ─── Mixing / Blend Time ─────────────────────────────────────────────────────
+BLEND_TIME = pd.DataFrame({
+    "Basket Mesh": ["10-mesh", "10-mesh", "20-mesh", "20-mesh", "40-mesh"],
+    "Volume (mL)": [500, 900, 500, 900, 900],
+    "RPM": [100, 100, 100, 100, 100],
+    "Relative Blend Time": [1.0, 1.8, 1.4, 2.2, 3.0],
+    "Qualitative Trend": ["Fastest (reference)", "Moderate", "Moderate", "Slower", "Slowest"],
+    "CFD–Exp Agreement": ["✓ Validated", "✓ Validated", "✓ Validated", "✓ Validated", "✓ Validated"],
+    "Impact on Sampling": [
+        "Most representative — minimal concentration gradients",
+        "Adequate — short blend time relative to typical dissolution",
+        "Adequate",
+        "Moderate gradient risk — sample timing matters",
+        "Highest gradient risk — dissolution may appear slower than actual",
+    ],
+})
+
+# Blend time baselines (seconds, approximate) for condition scaling — Pace et al. 2023
+BLEND_BASELINES_900 = {"10-mesh": 45, "20-mesh": 63, "40-mesh": 90}
+BLEND_BASELINES_500 = {"10-mesh": 30, "20-mesh": 42, "40-mesh": 60}
+
 # ─── BCS Classification Data ─────────────────────────────────────────────────
 BCS_CLASSES = {
     "I": {

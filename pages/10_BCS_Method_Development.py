@@ -89,20 +89,18 @@ col_chart, col_desc = st.columns([1.4, 1])
 
 with col_chart:
     # Build quadrant scatter chart
+    rng = np.random.default_rng(42)
     drug_data = []
     for cls_key, cls in BCS_CLASSES.items():
-        # Place drugs at approximate positions in solubility-permeability space
-        n_drugs = len(cls["examples"])
         for i, drug in enumerate(cls["examples"]):
-            # Scatter around quadrant center
             if cls_key == "I":
-                sx, py = np.random.uniform(0.6, 0.95), np.random.uniform(0.6, 0.95)
+                sx, py = rng.uniform(0.6, 0.95), rng.uniform(0.6, 0.95)
             elif cls_key == "II":
-                sx, py = np.random.uniform(0.05, 0.4), np.random.uniform(0.6, 0.95)
+                sx, py = rng.uniform(0.05, 0.4), rng.uniform(0.6, 0.95)
             elif cls_key == "III":
-                sx, py = np.random.uniform(0.6, 0.95), np.random.uniform(0.05, 0.4)
+                sx, py = rng.uniform(0.6, 0.95), rng.uniform(0.05, 0.4)
             else:
-                sx, py = np.random.uniform(0.05, 0.4), np.random.uniform(0.05, 0.4)
+                sx, py = rng.uniform(0.05, 0.4), rng.uniform(0.05, 0.4)
             drug_data.append({
                 "Drug": drug, "Solubility": sx, "Permeability": py,
                 "Class": f"Class {cls_key}", "Color": cls["color"],
@@ -312,7 +310,7 @@ st.markdown("---")
 st.markdown("## Apparatus Parameter Sensitivity by BCS Class")
 
 sens_map = {"Low": 1, "Low–Medium": 2, "Medium": 3, "High": 4}
-heatmap_z = BCS_SENSITIVITY[["Class I", "Class II", "Class III", "Class IV"]].applymap(
+heatmap_z = BCS_SENSITIVITY[["Class I", "Class II", "Class III", "Class IV"]].map(
     lambda x: sens_map.get(x, 0)).values.tolist()
 heatmap_text = BCS_SENSITIVITY[["Class I", "Class II", "Class III", "Class IV"]].values.tolist()
 

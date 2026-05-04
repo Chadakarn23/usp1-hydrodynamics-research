@@ -42,8 +42,10 @@ with col1:
     → *Go to the* ***Flow Rate*** *page to explore this interactively.*
     """)
 with col2:
-    st.image(str(IMG / "cfd-10mesh-velocity.png"), caption="10-mesh: stronger flow below basket", use_container_width=True)
-    st.caption("CFD simulation results from the author's original research.")
+    _img = IMG / "cfd-10mesh-velocity.png"
+    if _img.exists():
+        st.image(str(_img), caption="10-mesh: stronger flow below basket", use_container_width=True)
+        st.caption("CFD simulation results from the author's original research.")
 
 st.markdown("---")
 
@@ -76,8 +78,10 @@ with col1:
     *Source: CES 2023, Section 5.3*
     """)
 with col2:
-    st.image(str(IMG / "cfd-20mesh-velocity.png"), caption="Upward flow visible below the basket", use_container_width=True)
-    st.caption("CFD simulation results from the author's original research.")
+    _img = IMG / "cfd-20mesh-velocity.png"
+    if _img.exists():
+        st.image(str(_img), caption="Upward flow visible below the basket", use_container_width=True)
+        st.caption("CFD simulation results from the author's original research.")
 
 st.markdown("---")
 

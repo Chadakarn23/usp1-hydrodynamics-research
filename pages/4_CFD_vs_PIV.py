@@ -24,9 +24,13 @@ st.markdown("### Velocity Fields — 10-mesh vs 20-mesh Basket")
 st.caption("CFD simulation results from the author's original research (ANSYS Fluent, Realizable k-ε).")
 col_hero1, col_hero2 = st.columns(2)
 with col_hero1:
-    st.image(str(IMG / "cfd-10mesh-velocity.png"), caption="10-mesh basket — 2.15M cells", use_container_width=True)
+    _img = IMG / "cfd-10mesh-velocity.png"
+    if _img.exists():
+        st.image(str(_img), caption="10-mesh basket — 2.15M cells", use_container_width=True)
 with col_hero2:
-    st.image(str(IMG / "cfd-20mesh-velocity.png"), caption="20-mesh basket — 7.49M cells", use_container_width=True)
+    _img = IMG / "cfd-20mesh-velocity.png"
+    if _img.exists():
+        st.image(str(_img), caption="20-mesh basket — 7.49M cells", use_container_width=True)
 
 st.markdown("---")
 

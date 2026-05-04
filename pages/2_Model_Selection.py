@@ -80,8 +80,12 @@ st.markdown("### CFD Velocity Contours — Selected Model vs Failed Model")
 st.markdown("*Actual CFD results from the Realizable k-ε (selected) vs k-ω (failed) simulations.*")
 col_img1, col_img2 = st.columns(2)
 with col_img1:
-    st.image(str(IMG / "cfd-selected-model.png"), caption="✅ Realizable k-ε + Std Wall Functions (selected)", use_container_width=True)
-    st.caption("CFD simulation results from the author's original research.")
+    _img = IMG / "cfd-selected-model.png"
+    if _img.exists():
+        st.image(str(_img), caption="✅ Realizable k-ε + Std Wall Functions (selected)", use_container_width=True)
+        st.caption("CFD simulation results from the author's original research.")
 with col_img2:
-    st.image(str(IMG / "cfd-kw-failed.png"), caption="❌ k-ω Low Re (failed — noisy, non-physical)", use_container_width=True)
-    st.caption("CFD simulation results from the author's original research.")
+    _img = IMG / "cfd-kw-failed.png"
+    if _img.exists():
+        st.image(str(_img), caption="❌ k-ω Low Re (failed — noisy, non-physical)", use_container_width=True)
+        st.caption("CFD simulation results from the author's original research.")

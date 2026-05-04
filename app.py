@@ -218,7 +218,7 @@ for row_start in range(0, len(CARDS), 3):
             page_num = idx + 1
             href = _url_map.get(page_num, "#")
             cards_html += f'''
-            <a class="nav-card-link" href="{href}" target="_blank" rel="noopener">
+            <a class="nav-card-link" href="{href}">
                 <div class="nav-card">
                     <div class="icon">{icon}</div>
                     <div class="title">{title}</div>
