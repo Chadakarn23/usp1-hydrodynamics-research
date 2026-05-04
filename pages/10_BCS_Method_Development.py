@@ -421,12 +421,15 @@ with disc_col2:
             fill="toself", name=cond, line_color=color, opacity=0.6,
         ))
     fig_disc.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
-        title="Relative Discriminating Power<br>by Condition (qualitative)",
+        polar=dict(radialaxis=dict(visible=True, range=[0, 10],
+                                   tickvals=[0, 5, 10],
+                                   ticktext=["Low", "Medium", "High"])),
+        title="Relative Discriminating Power by Condition<br><sub>Qualitative author judgment — not measured</sub>",
         template="plotly_white", height=360,
         legend=dict(orientation="h", yanchor="bottom", y=-0.25, font=dict(size=10)),
     )
     st.plotly_chart(fig_disc, use_container_width=True)
+    st.caption("⚠️ Qualitative scoring (0–10) reflects author judgment based on hydrodynamic sensitivity. Not derived from measured dissolution discrimination data.")
 
 st.markdown("---")
 

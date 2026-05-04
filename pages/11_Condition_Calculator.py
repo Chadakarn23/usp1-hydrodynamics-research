@@ -122,18 +122,16 @@ power_no_data = basket_mesh not in power_baselines
 power_ref_val = power_baselines.get(basket_mesh, power_baselines["10-mesh"])
 power_user = power_ref_val * (N_user / N_ref) ** 3
 
-# Regime classification
+# Regime classification — stirred-tank conventions (Nienow; Holland & Chapman)
+# For impeller Re = ρND²/μ in unbaffled tanks: laminar < 10, transitional 10–10⁴, turbulent > 10⁴
 if re_user < 10:
-    regime = "Stokes (very low Re)"
-elif re_user < 100:
     regime = "Laminar"
-elif re_user < 2000:
+elif re_user < 1e4:
     regime = "Transitional"
 else:
     regime = "Turbulent"
 
-regime_color = {"Stokes (very low Re)": "#6c757d", "Laminar": "#28a745",
-                "Transitional": "#fd7e14", "Turbulent": "#dc3545"}
+regime_color = {"Laminar": "#28a745", "Transitional": "#fd7e14", "Turbulent": "#dc3545"}
 
 st.markdown("---")
 st.markdown("### Calculated Hydrodynamic Conditions")
@@ -293,11 +291,13 @@ with col_re1:
     | **Regime** | {regime} |
     | **vs. Published** | {re_user/RE:.2f}× (baseline Re = {RE:.0f}) |
 
-    **What Re means for dissolution:**
-    - Re < 10: Viscous-dominated, very slow mixing
-    - Re 100–2000 (transitional): Most USP conditions fall here
-    - Re > 2000: Turbulent flow — high shear, very fast dissolution
+    **What Re means for dissolution (stirred-tank convention):**
+    - Re < 10: Laminar, viscous-dominated
+    - Re 10 – 10⁴: Transitional — **all standard USP-1 conditions fall here**
+    - Re > 10⁴: Turbulent (would require ~1000 RPM in water — far outside USP range)
     - **Published validated range: Re ≈ 1075 (100 RPM, 20°C water)**
+
+    *Thresholds per Nienow (1997); Holland & Chapman, Liquid Mixing in Stirred Tanks.*
 
     At **37°C** (USP standard), water viscosity ≈ 0.692 mPa·s vs 1.000 mPa·s at 20°C —
     Re at 37°C is ~1.4× higher for the same RPM.
