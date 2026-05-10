@@ -69,8 +69,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Opens at **http://localhost:8501**.
-
 **Requirements:** Python 3.10+ · Streamlit · Plotly · NumPy · Pandas (see `requirements.txt`)
 
 ---
